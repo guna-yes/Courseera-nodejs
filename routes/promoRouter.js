@@ -1,42 +1,108 @@
 var express = require('express');
 var promoRouter = express.Router();
+var bodyParser=require("body-parser")
+const Promos=require("../models/promotions")
+promoRouter.use(bodyParser.urlencoded({urlencoded:true}))
 
 promoRouter.route('/')
-    .all(function (req, res, next) {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        next();
+ .get((req,res)=>
+ {
+     Promos.find((err,found)=>{
+         if (found) {
+             if (found == null) {
+                 res.send("Nothing to show")
+             }
+             else if (!found) {
+                 res.send("Not found")
+             }
+             else {
+                 console.log(found)
+                 res.send(found)
+             }
+         }
+         else {
+             console.log(err);
+             res.send(err.message)
+         }
+     })
+ })
+ .post((req,res)=>{
+     Promos.create(req.body,(err,create)=>{
+         if(!err){
+             console.log("created")
+             res.send(create)
+         }
+         else{
+             console.log(err)
+             res.send(err);
+             
+         }
+     })
+})
+.delete((req,res)=>{
+    Promos.deleteMany({},(err)=>{
+        if(!err){
+            console.log("deleted successfully")
+            res.send("deleted successfully")
+        }else{
+            console.log(err)
+        }
+
     })
-
-    .get(function (req, res, next) {
-        res.end('Will send all the promotions to you!');
+})
+.put((req,res)=>{
+    res.send("Put operation cannot be supported ")
+});
+promoRouter.route("/:promoid")
+.get((req,res)=>{
+    Promos.findById(req.params.promoid,(err,found)=>{
+        if (found) {
+            if (found == null) {
+                res.send("Nothing to show")
+            }
+            else if (!found) {
+                res.send("Not found")
+            }
+            else {
+                console.log(found)
+                res.send(found)
+            }
+        }
+        else {
+            console.log(err);
+            res.send(err.message)
+        }
     })
+})
+.post((req,res)=>{
+    res.send("cannot perform put operation")
+})
+.delete((req,res)=>{
+    Promos.deleteMany({_id:req.params.promoid},(err)=>{
+        if(err){
+            console.log(err)
 
-    .post(function (req, res, next) {
-        res.end('Will add the promotion: ' + req.body.name + ' with details: ' + req.body.description);
-    })
+        }else{
+            res.send("deleted")
 
-    .delete(function (req, res, next) {
-        res.end('Deleting all promotions');
-    });
+        }    
+})
+})
+.put((req,res)=>{
+    Promos.findByIdAndUpdate(req.params.promoid,{$set:req.body},(err,updated)=>{
+        if(!err){
+            res.send(updated)
+            console.log("updated")
+        }
+        else{
+            res.send(err)
+            console.log(err)
+        }
 
-promoRouter.route('/:promoId')
-    .all(function (req, res, next) {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        next();
-    })
+})
+})
 
-    .get(function (req, res, next) {
-        res.end('Will send details of the promotion: ' + req.params.promoId + ' to you!');
-    })
-
-    .put(function (req, res, next) {
-        res.write('Updating the promotion: ' + req.params.promoId + '\n');
-        res.end('Will update the promotion: ' + req.body.name +
-            ' with details: ' + req.body.description);
-    })
-
-    .delete(function (req, res, next) {
-        res.end('Deleting promotion: ' + req.params.promoId);
-    });
 
 module.exports = promoRouter;
+
+

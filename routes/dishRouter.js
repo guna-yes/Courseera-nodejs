@@ -1,13 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-
 const Dishes = require('../models/dishes');
-
 const dishRouter = express.Router();
-
 dishRouter.use(bodyParser.json());
-
 dishRouter.route('/')
     .get((req, res, next) => {
         Dishes.find({})
@@ -68,8 +63,6 @@ dishRouter.route('/:dishId')
             .catch((err) => next(err));
     })
     .delete((req, res,next ) => {
-       
-        
         Dishes.findByIdAndRemove(req.params.dishId)
             .then((resp) => {
                 res.statusCode = 200;
