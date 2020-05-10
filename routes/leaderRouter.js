@@ -17,8 +17,9 @@ leaderRouter.route('/')
                 }
             }
             else {
+             
                 console.log(err);
-                res.send(err.message)
+                res.send(err)
             }
         })
     })
