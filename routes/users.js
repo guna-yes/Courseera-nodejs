@@ -10,8 +10,16 @@ var authenticate = require('../authenticate');
 router.use(bodyParser.json());
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/',authenticate.verifyUser,authenticate.verifyAdmin, function(req, res) {
+  User.find({},(err,found)=>{
+    if(!err){
+      res.send(found)
+    }
+    else{
+      res.send(err)
+    }
+
+  })
 });
 
 router.post('/signup', (req, res, next) => {
