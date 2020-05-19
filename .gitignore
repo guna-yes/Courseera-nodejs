@@ -1,4 +1,4 @@
 .env
 config
-/public/index.html
-node_modules
+public/index.html
+node_modules/
