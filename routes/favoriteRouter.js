@@ -23,11 +23,10 @@ favouriteRouter.route("/")
             .catch((err) => next(err));
 
     })
-    .post(cors.corsWithOptions,authenticate.verifyUser,(req,res)=>{
-        Favourite.findOne({user:req.user._id})
-        .then((favourite)=>{
-            if (favourite) {
-                {
+    .post(cors.corsWithOptions, authenticate.verifyUser, (req, res) => {
+        Favourite.findOne({ user: req.user._id })
+            .then((favourite) => {
+                if (favourite) {
                     favourite.favouriteDishes.push(req.body);
                     favourite.save()
                         .then((favorite) => {
@@ -37,19 +36,16 @@ favouriteRouter.route("/")
                             res.json(favorite);
                         }, (err) => next(err));
                 }
-
-
-            }
-            else {
-                Favourite.create({ "user": req.user._id, "favouriteDishes": req.body })
-                    .then((favorite) => {
-                        console.log('Favorite Created ', favorite);
-                        res.statusCode = 200;
-                        res.setHeader('Content-Type', 'application/json');
-                        res.json(favorite);
-                    }, (err) => next(err));
-            }
-        }, (err) => next(err))
+                else {
+                    Favourite.create({ "user": req.user._id, "favouriteDishes": req.body })
+                        .then((favorite) => {
+                            console.log('Favorite Created ', favorite);
+                            res.statusCode = 200;
+                            res.setHeader('Content-Type', 'application/json');
+                            res.json(favorite);
+                        }, (err) => next(err));
+                }
+            }, (err) => next(err))
             .catch((err) => next(err));
     })
     .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {

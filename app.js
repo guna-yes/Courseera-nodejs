@@ -1,4 +1,5 @@
 var express = require('express');
+const dotenv=require("dotenv");
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -16,6 +17,7 @@ const uploadRouter = require('./routes/uploadRouter');
 const favouriteRouter=require("./routes/favoriteRouter")
 
 var config = require('./config');
+dotenv.config();
 
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
