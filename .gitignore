@@ -116,8 +116,8 @@ dist
 
 .config.js
 
-node_modules
+/node_modules
 
-node_modules/
+/node_modules/
 
-public/index.html
+/public/index.html
